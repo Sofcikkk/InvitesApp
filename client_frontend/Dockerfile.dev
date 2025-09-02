@@ -1,0 +1,20 @@
+# Ta zawartość powinna znaleźć się w obu plikach:
+# client_frontend/Dockerfile.dev
+# admin_panel/Dockerfile.dev
+
+FROM node:20
+
+# Ustawiamy katalog roboczy wewnątrz kontenera
+WORKDIR /app
+
+# Kontekst jest już poprawny, więc kopiujemy bezpośrednio
+COPY package*.json ./
+
+# Instalujemy zależności
+RUN npm install
+
+# Kopiujemy resztę kodu z bieżącego kontekstu
+COPY . .
+
+# Uruchamiamy serwer deweloperski
+CMD ["npm", "run", "dev"]

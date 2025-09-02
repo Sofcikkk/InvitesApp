@@ -1,0 +1,51 @@
+# Ten plik powinien znajdować się w głównym folderze projektu: InvitesApp/
+
+services:
+  # Serwis dla frontendu KLIENTA
+  client-frontend:
+    build:
+      context: ./client_frontend
+      dockerfile: Dockerfile.dev
+    container_name: zaproszenia-client-frontend-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client_frontend:/app
+      - /app/node_modules
+    networks:
+      - zaproszenia-net
+
+  # Serwis dla Panelu Administratora
+  admin-panel:
+    build:
+      context: ./admin_panel
+      dockerfile: Dockerfile.dev
+    container_name: zaproszenia-admin-panel-dev
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./admin_panel:/app
+      - /app/node_modules
+    networks:
+      - zaproszenia-net
+
+  # Serwis dla Backendu w Javie
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: zaproszenia-backend-dev
+    ports:
+      - "8080:8080"
+      # POPRAWKA: Usunęliśmy port debugowania, aby uniknąć konfliktów
+    volumes:
+      - ./backend:/app
+    networks:
+      - zaproszenia-net
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      # POPRAWKA: Usunęliśmy zmienną środowiskową dla debuggera
+
+networks:
+  zaproszenia-net:
+    driver: bridge
